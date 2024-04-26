@@ -16,31 +16,30 @@ def encodeBase(text, dictionary):
     for group in binaryGroups:  # Obtenemos cada grupo del grupo de binarios de 6 bits
         if len(group) == 6:  # Si el grupo es de 6 bits
             binToInt = int(group, 2)  # Convertimos el grupo de bits a un número decimal
-            outText += dictionary[
-                binToInt]  # Convertimos el número decimal que es el código ascii de un caracter en el propio caracter
+            outText += dictionary[binToInt]  # Convertimos el número decimal que es el código ascii de un caracter en el propio caracter
         else:  # En el caso de que no sea de 6 bits
-            binToInt = int(group.zfill(6), 2)
-            outText += dictionary[binToInt]
-            outText += '='
+            binToInt = int(group.zfill(6), 2)  # Rellenamos le grupo binario para que sea de 6 bits y lo convertimos a decimal
+            outText += dictionary[binToInt]  # Añadimos al texto que vamos a imprimir la letra teniendo en cuenta la posición de la letra en el diccionario
+            outText += '='  # Añadimos el caracter '=' para indicar que hemos rellenado con bits
     return outText
 
 
 def decodeBase(text, dictionary):
-    outText = ""
-    valueToBin = ''
+    outText = ""  # Variable para almacenar el texto que vamos a devolver
+    valueToBin = ''  # Lista para almacenar los valores binarios
     decimalValues = []  # Variable para almacenar la posición de la letra en el diccionario
-    for char in text:
-        if char != '=':
-            charPos = dictionary.find(char)
-            decimalValues.append(charPos)
-    for value in decimalValues:
-        valueToBin += bin(value)[2:].zfill(6)
-    binaryGroups = (binaryToGroups(valueToBin, 8))
-    for group in binaryGroups:
-        if len(group) == 8:
-            binToHex = hex(int(group, 2))
-            hexToChar = chr(int(binToHex, 16))
-            outText += hexToChar
+    for char in text:  # Recorremos el texto caracter por caracter
+        if char != '=':  # Si el caracter es distinto de '='
+            charPos = dictionary.find(char)  # Obtenemos la posición del caracter en el diccionario
+            decimalValues.append(charPos)  # Añadimos el valor de la posición a la lista
+    for value in decimalValues:  # Recorremos la lista de valores
+        valueToBin += bin(value)[2:].zfill(6)  # Pasamos el valor a binario, teniendo 6 bits
+    binaryGroups = (binaryToGroups(valueToBin, 8))  # El binario que tenemos lo dividimos en grupos de 8 bits
+    for group in binaryGroups:  # Recorremos la lista de binarios obteniendo cada grupo de 8 bits
+        if len(group) == 8:  # Si el grupo es de  8 bits
+            binToHex = hex(int(group, 2))  # Pasamos el binario a decimal y posteriormente a hexadecimal
+            hexToChar = chr(int(binToHex, 16))  # Una vez que tenemos el hexadecimal lo pasamos a decimal y posteriormente obtenemos el caracter ascii
+            outText += hexToChar  # Añadimos el caracter ascii al texto que vamos a devolver 
         else:
             groupCompleted = group.zfill(8)
             binToHex = hex(int(groupCompleted, 2))
