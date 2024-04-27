@@ -8,7 +8,6 @@ def extendKey(key, text):
     for i in range(len(text)):  # Recorremos desde cero hasta la longitud de la palabra
         if text[i] == ' ':  # En el caso de que el caracter sea un espacio
             keySpaced = keyExtended[:i] + ' ' + keyExtended[i: - 1]  # Con la posición del espacio dividimos la clave, añadimos un espacio y añadimos la otras parte de la clave que hemos dividido quitándole un caracter ya que al añadir el espacio sobra uno
-
     if keySpaced != "":  # En el caso de que la clave tenga espacios la devolvemos
         return keySpaced
     else:  # Si no teiene espacios la devolvemos isn espacios
