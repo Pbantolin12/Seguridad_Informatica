@@ -1,4 +1,4 @@
-def crypt(text, n, dictionary):
+def encodeCesar(text, n, dictionary):
     outText = ""  # Texto que vamos a devolver
     for char in text:  # Obtenemos cada letra del texto
         if char in dictionary:  # Si la letra está en el diccionario
@@ -12,7 +12,7 @@ def crypt(text, n, dictionary):
     return outText  # Devolvemos el texto
 
 
-def decrypt(text, n, dictionary):
+def decodeCesar(text, n, dictionary):
     outText = ""  # Texto que vamos a devolver
     for char in text:  # Obtenemos cada letra del texto
         if char in dictionary:  # Si la letra está en el diccionario
@@ -55,10 +55,10 @@ def main():
         # Dependiendo de la opción que hayamos seleccionado en el menú
         if option == 1:
             print()
-            print("Desencriptado [" + text + "] --> " + decrypt(text, n, dictionary) + "\n")
+            print("Decodificado [" + text + "] --> " + decodeCesar(text, n, dictionary) + "\n")
         elif option == 2:
             print()
-            print("Encriptado [" + text + "] --> " + crypt(text, n, dictionary) + "\n")
+            print("Codificado [" + text + "] --> " + encodeCesar(text, n, dictionary) + "\n")
         elif option == 3:
             print()
             print("El desplazamiento actual es de: " + str(n) + " caracteres\n")
