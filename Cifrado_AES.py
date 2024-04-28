@@ -1,13 +1,19 @@
 from Cryptodome.Cipher import AES
 from Cryptodome.Util.Padding import pad, unpad
+import base64
 
 def encodeAES(text, key):
-    
-
+    crypt = AES.new(key, AES.MODE_CBC)
+    outText = crypt.encrypt(pad(text.encode(), AES.block_size))
+    return base64.b64encode(crypt.iv + outText)
 
 
 def decodeAES(text, key):
-
+    encodedText = base64.b64decode(text)
+    iv = encodedText[:AES.block_size]
+    crypt = AES.new(key, AES.MODE_CBC, iv = iv)
+    outText = unpad(crypt.decrypt(encodedText[:AES.block_size]), AES.block_size)
+    return outText.decode()
 
 
 def menu():  # Menu de inicio
