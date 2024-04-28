@@ -1,19 +1,17 @@
-from Cryptodome.Cipher import AES
-from Cryptodome.Util.Padding import pad, unpad
-import base64
-
-def encodeAES(text, key):
-    crypt = AES.new(key, AES.MODE_CBC)
-    outText = crypt.encrypt(pad(text.encode(), AES.block_size))
-    return base64.b64encode(crypt.iv + outText)
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 
-def decodeAES(text, key):
-    encodedText = base64.b64decode(text)
-    iv = encodedText[:AES.block_size]
-    crypt = AES.new(key, AES.MODE_CBC, iv = iv)
-    outText = unpad(crypt.decrypt(encodedText[:AES.block_size]), AES.block_size)
-    return outText.decode()
+def encodeAES(text, key, iv):
+    cipher = AES.new(key, AES.MODE_CBC, iv)  # Creamos un nuevo objeto de cifrado AES en modo CBC
+    ciphertext = cipher.encrypt(pad(text.encode('utf-8'), AES.block_size))  # Con el objeto creado anteriormente ciframos el texto, rellenándolo con la función pad para que el tamaño sea de 16 bytes
+    return ciphertext.hex()  # Devolvemos el texto cifrado en formato hexadecimal
+
+
+def decodeAES(text, key, iv):
+    cipher = AES.new(key, AES.MODE_CBC, iv)  # Creamos un nuevo objeto de cifrado AES en modo CBC
+    decrypted = cipher.decrypt(bytes.fromhex(text))   # Decodifica el texto cifrado a binario
+    return decrypted.decode('utf-8')  # Devolvemos el texto cifrado en formato hexadecimal
 
 
 def menu():  # Menu de inicio
@@ -29,9 +27,10 @@ def menu():  # Menu de inicio
 
 
 def main():
-    dictionary = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"  # Diccionario que usaremos para encriptar y desencriptar
-    key = "Vinagre"  # Clave del cifrado
+    key = b'SeguridadInforma'  # Clave del cifrado
+    iv = b'SeguridadInforma'  # iv del cifrado
     option = 0  # Inicializamos la opción del menú (da igual el valor porque va a cambiar)
+
 
     print()
     text = input(">>Introduzca la palabra: ")  # Texto introducido por el usuario
@@ -43,16 +42,15 @@ def main():
         # Dependiendo de la opción que hayamos seleccionado en el menú
         if option == 1:
             print()
-            print("Decodificado [" + text + "] --> " + decodeAES(text, key) + "\n")
+            print("Decodificado [" + text + "] --> " + decodeAES(text, key, iv) + "\n")
         elif option == 2:
             print()
-            print("Codificado [" + text + "] --> " + encodeAES(text, key) + "\n")
+            print("Codificado [" + text + "] --> " + encodeAES(text, key, iv) + "\n")
         elif option == 3:
             print()
             print("La palabra actual es: " + text)
             print()
             text = input(">Introduce la nueva palabra: ")
-            key = extendKey(key, text)
         elif option == 4:
             print()
             print("Saliendo...")
